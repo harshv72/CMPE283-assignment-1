@@ -51,6 +51,12 @@
 <br><br>
 
 **Step-4: Created the project directory at root folder of Linux VM Instance. Uploaded code file and Makefile in this directory. I have taken reference from Intel SDM Manual to update the code file for primary/secondary/tertiary procbased controls, entry/exit controls etc.** <br><br>
+**Note:** <br>
+- I included all the functions to query all the other MSRs as explained in the assignment description in cmpe283-1.c. 
+- With the help of Intel SDM Manual, I created structures with name and bit positions for pinbased, procbased, secondary procbased(in case if it is available), tertiary procbased(in case if it is available), entry and exit controls. 
+- In order to detect VMX features availability of processor, we call report_capability ( ) function which prints if we can set/clear particular control or not.
+- To check if Secondary Procbased controls are available, , I looked for Bit-position(31) of IA32_VMX_PROCBASED MSR. If this bit is set, then secondary procbased controls are available.
+- Similarly, to check if Tertiary Procbased controls are available, , I looked for Bit-position(17) of IA32_VMX_PROCBASED MSR. If this bit is set, then tertiary procbased controls are available.
 
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 00 12 AM" src="https://user-images.githubusercontent.com/52853300/200432466-5e082234-7685-4924-944b-589d377e4716.png">
 <br><br>
