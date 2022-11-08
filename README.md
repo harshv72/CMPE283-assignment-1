@@ -38,15 +38,19 @@
 <img width="1512" alt="Screen Shot 2022-11-07 at 9 10 01 AM" src="https://user-images.githubusercontent.com/52853300/200431153-7bf37eb8-3496-4e0a-9fdb-25b984e4caeb.png">
 <br><br>
 
+**To create VM instance with enabled nested virtualization, use following command:**<br>
+**Note:** DON'T FORGET to make changes for project specific details in the following commmand such as project name, project id, zone details etc.<br>
+>*gcloud compute instances create instance-1 --project=cmpe283lab1 --zone=us-central1-a --machine-type=n2-standard-8 --network-interface=network-tier=PREMIUM,subnet=default --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=223088318882-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --min-cpu-platform=Intel\ Cascade\ Lake --create-disk=auto-delete=yes,boot=yes,device-name=instance-1,image=projects/debian-cloud/global/images/debian-11-bullseye-v20221102,mode=rw,size=10,type=projects/cmpe283lab1/zones/us-central1-a/diskTypes/pd-balanced --create-disk=auto-delete=yes,device-name=disk-1,image=projects/ubuntu-os-cloud/global/images/ubuntu-2204-jammy-v20221101a,mode=rw,name=disk-1,size=100,type=projects/cmpe283lab1/zones/us-central1-a/diskTypes/pd-ssd --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any --enable-nested-virtualization*
+
 <img width="1512" alt="Screen Shot 2022-11-07 at 9 40 41 AM" src="https://user-images.githubusercontent.com/52853300/200431387-086a059f-eddb-4604-af95-3818ea14ff89.png">
 <br><br>
 
-**Step-3: Logged into the VM instance using SSH.** <br><br>
+**Step-3: Logged into the VM instance using SSH. Go to VM instances of your project. Select the VM instance, we just created and click on SSH button in "Details" section** <br><br>
 
 <img width="1512" alt="Screen Shot 2022-11-07 at 9 59 11 AM" src="https://user-images.githubusercontent.com/52853300/200432398-d6a8899f-92e2-4436-88ff-c00a6e303f7e.png">
 <br><br>
 
-**Step-4: Created the project directory at root folder of Linux VM Instance. Uploaded code file and Makefile in this directory. Updated the code file using Intel SDM Manual.** <br><br>
+**Step-4: Created the project directory at root folder of Linux VM Instance. Uploaded code file and Makefile in this directory. I have taken reference from Intel SDM Manual to update the code file for primary/secondary/tertiary procbased controls, entry/exit controls etc.** <br><br>
 
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 00 12 AM" src="https://user-images.githubusercontent.com/52853300/200432466-5e082234-7685-4924-944b-589d377e4716.png">
 <br><br>
@@ -56,23 +60,35 @@
 
 **Step-5: Installed "make" command into instance. Checked the kernel information using "uname -r" command and then installed Linux Headers accordingly for that specific version of the kernel.** <br><br>
 
+>*sudo bash*<br>
+>*apt install gcc make*<br>
+
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 31 18 AM" src="https://user-images.githubusercontent.com/52853300/200432649-8bb71aff-0de4-4236-9b9a-a06f76cac6cc.png">
 <br><br>
+
+>*exit*<br>
+>*uname -r*<br>
+>*sudo apt-get install linux-headers-{uname -r kernel version value}-cloud-amd64*<br>
 
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 32 25 AM" src="https://user-images.githubusercontent.com/52853300/200432683-abbc3829-0118-4f8d-85af-16345ccfeff8.png">
 <br><br>
 
 **Step-6: Built the kernel module using make command.** <br><br>
 
+>*make*<br>
+
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 36 59 AM" src="https://user-images.githubusercontent.com/52853300/200435096-640febfc-030b-47a2-a060-5f06366e7701.png">
 <br><br>
 
 **Step-7: Inserted this kernel module using "insmod" command. And finally checked the VMX Features availability using "dmesg" command.** <br><br>
 
+>*sudo /sbin/insmod cmpe283-1.ko*<br>
+>*sudo dmesg*<br>
+
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 38 29 AM" src="https://user-images.githubusercontent.com/52853300/200435185-97e620b1-a162-4ff2-b748-42c43491ad0a.png">
 <br><br>
 
-**Output:**
+## Output:
 
 <img width="1512" alt="Screen Shot 2022-11-07 at 10 44 42 AM" src="https://user-images.githubusercontent.com/52853300/200435348-d915cd14-9d0f-464d-8ccd-5c770bde3210.png">
 <br><br>
@@ -80,9 +96,12 @@
 <img width="1510" alt="Screen Shot 2022-11-07 at 10 45 20 AM" src="https://user-images.githubusercontent.com/52853300/200435363-6fbb42a9-50a8-43a1-9e3f-44db2103adf1.png">
 <br><br>
 
-**Explanation for not trying tertiary procbased control:**
+## Explanation for not trying tertiary procbased controls:
 
-From the output of primary procbased controls, I got to know that I do not have permission to set tertiary procbased control. Hence, I wrote the code for tertiary procbased controls but did not run it(hence commented it). <br><br>
+From the output of primary procbased controls as shown below, I got to know that I do not have permission to set tertiary procbased controls. Hence, I commented the code for tertiary procbased controls and did not run it.<br><br>
+
+<img width="573" alt="Screen Shot 2022-11-07 at 1 57 14 PM copy" src="https://user-images.githubusercontent.com/52853300/200464058-4cef6516-b4e0-4b8f-98e0-65b4a5afbb93.png">
+<br><br>
 
 Note: If you try to call MSR for Tertiary Procbased Controls and if you do not have access to set it just like in my case, you will get an error as following: <br><br>
 
